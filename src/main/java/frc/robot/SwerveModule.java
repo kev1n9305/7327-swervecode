@@ -103,6 +103,25 @@ public double currentAngle(){
   return Math.toRadians(angle);
 }
 
+public double limitedAngle(){
+  double angle = (absoluteEncoder.getVoltage() / RobotController.getVoltage5V() * 360);
+  //angle *= 2.0 * Math.PI;
+
+  angle += Math.toDegrees(absoluteEncoderOffsetRad);
+
+  angle %= 360.0; // keep angle between 0 and 359 degrees
+  if (angle < 0) {
+    angle += 360.0; // adjust for negative angles
+  }
+  
+  if (angle > 180) {
+    angle -= 360; // adjust for angles greater than 180 degrees
+  }
+  
+  return Math.toRadians(angle);
+}
+
+
 
 public double getDrivePosition() {
   return driveEncoder.getPosition();
@@ -122,8 +141,11 @@ public double getDrivePosition() {
 
  
   public void setDesiredState(SwerveModuleState desiredState) {
+
+
  SwerveModuleState state =
-        Drivetrain.newOptimize(desiredState, new Rotation2d(currentAngle()));
+    //SwerveModuleState.optimize(desiredState, new Rotation2d(limitedAngle()));
+       Drivetrain.newOptimize(desiredState, new Rotation2d(currentAngle()));
 
     // Calculate the drive output from the drive PID controller.
     final double driveOutput =
@@ -136,5 +158,8 @@ public double getDrivePosition() {
     // Calculate the turning motor output from the turning PID controller.
     driveMotor.set(driveOutput);
     turnMotor.set(ControlMode.PercentOutput,turnOutput);
+   SmartDashboard.putString("swerve"+ absoluteEncoder.getChannel()+ "og Angle", state.toString());
+    SmartDashboard.putString("swerve"+ absoluteEncoder.getChannel()+ "og Angle", desiredState.toString());
+    SmartDashboard.putNumber("swerve"+ absoluteEncoder.getChannel() + "currentAngle", currentAngle());
   }
 }

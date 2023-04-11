@@ -20,7 +20,7 @@ import frc.robot.Constants.DriveConstants;
 /** Represents a swerve drive style drivetrain. */
 public class Drivetrain {
   public static final double kMaxSpeed = 3.0; // 3 meters per second
-  public static final double kMaxAngularSpeed = Math.PI; // 1/2 rotation per second
+  public static final double kMaxAngularSpeed = 3*Math.PI; // 1/2 rotation per second
 
   private final Translation2d m_frontLeftLocation = new Translation2d(.15, .15);
   private final Translation2d m_frontRightLocation = new Translation2d(.15, -.15);
@@ -65,7 +65,7 @@ public Drivetrain() {
   new Thread(() -> {
       try {
           Thread.sleep(1000);
-          zeroHeading();
+          m_gyro.reset();
       } catch (Exception e) {
       }
   }).start();
@@ -86,6 +86,7 @@ public Drivetrain() {
             m_backLeft.getPosition(),
             m_backRight.getPosition()
           });
+
           public void zeroHeading() {
             m_gyro.reset();
         }
@@ -93,14 +94,14 @@ public Drivetrain() {
 //    m_gyro.reset();
  // }
 
-  /**
-   * Method to drive the robot using joystick info.
-   *
-   * @param xSpeed Speed of the robot in the x direction (forward).
-   * @param ySpeed Speed of the robot in the y direction (sideways).
-   * @param rot Angular rate of the robot.
-   * @param fieldRelative Whether the provided x and y speeds are relative to the field.
-   */
+public void resetHeading( boolean isReset){
+  if(isReset){
+  zeroHeading();
+  }
+}
+
+
+ 
   public void drive(double xSpeed, double ySpeed, double rot, boolean fieldRelative) {
     var swerveModuleStates =
         m_kinematics.toSwerveModuleStates(
@@ -126,55 +127,21 @@ public Drivetrain() {
         });
   }
 
-  public static SwerveModuleState newerOptimize(SwerveModuleState desiredState, Rotation2d currentAngle) {
-
-    double ogSpeed = desiredState.speedMetersPerSecond;
-
-    var delta = desiredState.angle.minus(currentAngle);
-
-    Rotation2d ogAngle = desiredState.angle;
-    if (Math.abs(delta.getDegrees()) > 90.0) {
-        Rotation2d desiredAngle = desiredState.angle.rotateBy(Rotation2d.fromDegrees(180.0));
-        double desiredSpeed = -desiredState.speedMetersPerSecond;
-        var angleCheck =   Math.abs(delta.getDegrees()) - Math.abs(ogAngle.getDegrees());
-        if(angleCheck >=175){
-         desiredSpeed = -desiredSpeed;
-        }
-
-        return new SwerveModuleState(desiredSpeed, desiredAngle);
-    } else {
-        return new SwerveModuleState(ogSpeed, ogAngle);
-    }
-}
-  
-
-
-
-
-
-
-
-
-
-
 
   public static SwerveModuleState newOptimize(
           SwerveModuleState desiredState, Rotation2d currentAngle) {
 
-            boolean isOptimized = false;
         var delta = desiredState.angle.minus(currentAngle);
-
-        double ogSpeed = desiredState.speedMetersPerSecond;
 
         double newSpeed = desiredState.speedMetersPerSecond;
         
         Rotation2d ogAngle = desiredState.angle;
 
         Rotation2d optimizedAngle;
-        if (Math.abs(delta.getDegrees()) > 160.0) { //160 works well
+        if (Math.abs(delta.getDegrees()) > 165.0) { //160 works well
           optimizedAngle=  desiredState.angle.rotateBy(Rotation2d.fromDegrees(180.0));
           newSpeed = -newSpeed;
-          isOptimized =true;
+      
           return new SwerveModuleState(
             newSpeed,
               optimizedAngle);
@@ -183,73 +150,4 @@ public Drivetrain() {
          return new SwerveModuleState(desiredState.speedMetersPerSecond, ogAngle);
        }
       }                                                                                                                                           
-    
-    
-    
-
-
-  public static SwerveModuleState junkOptimize(SwerveModuleState desiredState, Rotation2d currentAngle) {
-    double targetAngle = placeInAppropriate0To360Scope(currentAngle.getDegrees(), desiredState.angle.getDegrees());
-    double targetSpeed = desiredState.speedMetersPerSecond;
-    double speedCheck= desiredState.speedMetersPerSecond;
-
-    boolean wasOptimized = false;
-
-    double unoptimizedAngle = desiredState.angle.getRadians();
-    if (unoptimizedAngle < 0) {
-      unoptimizedAngle += 2 * Math.PI;
     }
-
-    double angleCheck = targetAngle;
-    double distance = Math.abs(unoptimizedAngle - angleCheck);
-
-
-    double delta = targetAngle - currentAngle.getDegrees();
-    
-    if (Math.abs(delta) > 90){
-        targetSpeed = -targetSpeed;
-        targetAngle = delta > 90 ? (targetAngle -= 180) : (targetAngle += 180);
-        wasOptimized = true;
-    }
-        if(distance >=170 && distance < 190 ){
-          targetSpeed = -targetSpeed;
-          wasOptimized = false;
-        }
-
-        //if(speedCheck > targetSpeed && angleCheck >180 || angleCheck < 180){
-        //  targetSpeed= -targetSpeed;
-       // }
-    
-    return new SwerveModuleState(targetSpeed, Rotation2d.fromDegrees(targetAngle));
-  }
-
-  /**
-     * @param scopeReference Current Angle
-     * @param newAngle Target Angle
-     * @return Closest angle within scope
-     */
-    private static double placeInAppropriate0To360Scope(double scopeReference, double newAngle) {
-      double lowerBound;
-      double upperBound;
-      double lowerOffset = scopeReference % 360;
-      if (lowerOffset >= 0) {
-          lowerBound = scopeReference - lowerOffset;
-          upperBound = scopeReference + (360 - lowerOffset);
-      } else {
-          upperBound = scopeReference - lowerOffset;
-          lowerBound = scopeReference - (360 + lowerOffset);
-      }
-      while (newAngle < lowerBound) {
-          newAngle += 360;
-      }
-      while (newAngle > upperBound) {
-          newAngle -= 360;
-      }
-      if (newAngle - scopeReference > 180) {
-          newAngle -= 360;
-      } else if (newAngle - scopeReference < -180) {
-          newAngle += 360;
-      }
-      return newAngle;
-  }
-}

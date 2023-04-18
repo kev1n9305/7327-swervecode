@@ -45,7 +45,9 @@ public class SwerveModule {
       
      // private final AnalogInput absoluteEncoder;
 
-      private final AnalogInput absoluteEncoder;
+     private final AnalogInput absoluteEncoder;
+
+     // private final AnalogEncoder absAnalogEncoder;
 
       private final RelativeEncoder driveEncoder;
 
@@ -54,6 +56,8 @@ public class SwerveModule {
       private final boolean absoluteEncoderReversed;
 
       private final PIDController m_turningPIDController  = new PIDController(1.5,0, 0);
+
+     // private final Drivetrain m_swerves = new Drivetrain();
 
       /* 
 
@@ -72,9 +76,11 @@ public SwerveModule(int drivingCANId, int turningCANId,int absolutEncoderID, dou
   turnMotor = new VictorSPX(turningCANId);
 
   absoluteEncoder = new AnalogInput(absolutEncoderID);
+  //absAnalogEncoder = new AnalogEncoder(absolutEncoderID);
 
 driveEncoder = driveMotor.getEncoder();
 
+//absAnalogEncoder.setDistancePerRotation(Math.PI);
 
 this.absoluteEncoderOffsetRad = Offset;
 this.absoluteEncoderReversed = driveMotorReversed;
@@ -89,7 +95,7 @@ driveEncoder.setPosition(0);
 
 
 }
-
+ 
 public double currentAngle(){
   double angle = (absoluteEncoder.getVoltage() / RobotController.getVoltage5V() * 360);
   //angle *= 2.0 * Math.PI;
@@ -134,7 +140,7 @@ public double getDrivePosition() {
 
   public SwerveModulePosition getPosition() {
     return new SwerveModulePosition(
-        driveEncoder.getPosition(), new Rotation2d(currentAngle() ));
+        driveEncoder.getPosition(), new Rotation2d(currentAngle()));
   }
 
 
@@ -144,7 +150,7 @@ public double getDrivePosition() {
 
 
  SwerveModuleState state =
-    //SwerveModuleState.optimize(desiredState, new Rotation2d(limitedAngle()));
+    //SwerveModuleState.optimize(desiredState, new Rotation2d(Math.toDegrees(currentAngle())));
        Drivetrain.newOptimize(desiredState, new Rotation2d(currentAngle()));
 
     // Calculate the drive output from the drive PID controller.
@@ -159,7 +165,8 @@ public double getDrivePosition() {
     driveMotor.set(driveOutput);
     turnMotor.set(ControlMode.PercentOutput,turnOutput);
    SmartDashboard.putString("swerve"+ absoluteEncoder.getChannel()+ "og Angle", state.toString());
-    SmartDashboard.putString("swerve"+ absoluteEncoder.getChannel()+ "og Angle", desiredState.toString());
+   // SmartDashboard.putString("swerve"+ absoluteEncoder.getChannel()+ "og Angle", desiredState.toString());
     SmartDashboard.putNumber("swerve"+ absoluteEncoder.getChannel() + "currentAngle", currentAngle());
+    
   }
 }

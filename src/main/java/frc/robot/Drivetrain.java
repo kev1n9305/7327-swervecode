@@ -15,12 +15,15 @@ import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.AnalogGyro;
 import edu.wpi.first.wpilibj.SPI;
+import edu.wpi.first.wpilibj.interfaces.Gyro;
 import frc.robot.Constants.DriveConstants;
 
 /** Represents a swerve drive style drivetrain. */
 public class Drivetrain {
   public static final double kMaxSpeed = 3.0; // 3 meters per second
-  public static final double kMaxAngularSpeed = 3*Math.PI; // 1/2 rotation per second
+  public static final double kMaxAngularSpeed = 4*Math.PI; // 1/2 rotation per second
+  
+
 
   private final Translation2d m_frontLeftLocation = new Translation2d(.15, .15);
   private final Translation2d m_frontRightLocation = new Translation2d(.15, -.15);
@@ -60,15 +63,22 @@ private final SwerveModule m_backRight = new SwerveModule(
 private final AHRS m_gyro = new AHRS(SPI.Port.kMXP);
 
 
+//AnalogGyro m = new AnalogGyro(5);
+
 
 public Drivetrain() {
   new Thread(() -> {
       try {
-          Thread.sleep(1000);
+          Thread.sleep(3000);
           m_gyro.reset();
       } catch (Exception e) {
       }
   }).start();
+}
+
+
+public double getHeading() {
+  return Math.IEEEremainder(m_gyro.getAngle(), 360);
 }
   //private final AnalogGyro m_gyro = new AnalogGyro(5);
 
@@ -88,31 +98,41 @@ public Drivetrain() {
           });
 
           public void zeroHeading() {
-            m_gyro.reset();
+            m_gyro.zeroYaw();
         }
- // public Drivetrain() {
-//    m_gyro.reset();
- // }
+
 
 public void resetHeading( boolean isReset){
   if(isReset){
   zeroHeading();
   }
 }
+public Rotation2d getRotation3d() {
+  return Rotation2d.fromDegrees(getHeading());
+}
+
+public double getGyroYaw(){
+  return m_gyro.getYaw();
+}
 
 
  
   public void drive(double xSpeed, double ySpeed, double rot, boolean fieldRelative) {
+  //  Rotation2d fieldRelativeHeading = getFieldRelativeHeading();
+  
     var swerveModuleStates =
         m_kinematics.toSwerveModuleStates(
             fieldRelative
-                ? ChassisSpeeds.fromFieldRelativeSpeeds(xSpeed, ySpeed, rot, m_gyro.getRotation2d())
+            ? ChassisSpeeds.fromFieldRelativeSpeeds(xSpeed, ySpeed, rot, Rotation2d.fromDegrees(-m_gyro.getYaw()))
+               // ? ChassisSpeeds.fromFieldRelativeSpeeds(xSpeed, ySpeed, rot, m_gyro.getRotation2d())
                 : new ChassisSpeeds(xSpeed, ySpeed, rot));
     SwerveDriveKinematics.desaturateWheelSpeeds(swerveModuleStates, kMaxSpeed);
     m_frontLeft.setDesiredState(swerveModuleStates[0]);
     m_frontRight.setDesiredState(swerveModuleStates[1]);
     m_backLeft.setDesiredState(swerveModuleStates[2]);
     m_backRight.setDesiredState(swerveModuleStates[3]);
+
+    
   }
 
   /** Updates the field relative position of the robot. */
@@ -138,7 +158,7 @@ public void resetHeading( boolean isReset){
         Rotation2d ogAngle = desiredState.angle;
 
         Rotation2d optimizedAngle;
-        if (Math.abs(delta.getDegrees()) > 165.0) { //160 works well
+        if (Math.abs(delta.getDegrees()) > 170) { //160 works well
           optimizedAngle=  desiredState.angle.rotateBy(Rotation2d.fromDegrees(180.0));
           newSpeed = -newSpeed;
       

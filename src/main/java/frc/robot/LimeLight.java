@@ -50,13 +50,14 @@ public class LimeLight {
 
     double nodeATagsHeightInches;
     double aTagsDistanceFromLimelightToGoalInches;
+    // double doubleSubstationATagsHeightInches;
 
     double rTapeHeightIn;
     double rTapeDistanceFromLimelightToGoalInches;
 
     if(currentPipeline == 0) {  //April Tags
         nodeATagsHeightInches = 18.25; 
-        // double doubleSubstationATagsHeightInches = 27.375;
+        // doubleSubstationATagsHeightInches = 27.375;
         aTagsDistanceFromLimelightToGoalInches = (nodeATagsHeightInches - limelightLensHeightInches) / Math.tan(angleToGoalRadians);
         return aTagsDistanceFromLimelightToGoalInches / 1.85; 
     } else if(currentPipeline == 1){ //Retro Tape

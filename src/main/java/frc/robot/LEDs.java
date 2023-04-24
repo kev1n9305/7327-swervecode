@@ -23,7 +23,7 @@ public class LEDs {
       System.out.println("Burgundy!");
     }
     
-    public void setGold() { // autunomous?\
+    public void setGold() { // autunomous?
       redOutput.setRaw(175);   // R: 175, G: 155, B: 35
       greenOutput.setRaw(155);
       blueOutput.setRaw(35);

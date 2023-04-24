@@ -55,9 +55,9 @@ public void robotInit(){
     pixy.setCameraBrightness(50);
 
     leds = new LEDs(0);
-    leds.setBurgundy();
-   
+    leds.setBurgundy();   
 }
+
   @Override
   public void autonomousPeriodic() {
     driveWithJoystick(true);
@@ -135,6 +135,7 @@ public void robotInit(){
             } */
             -m_rotLimiter.calculate(MathUtil.applyDeadband(driverController.getRightX(), 0.1))
             * Drivetrain.kMaxAngularSpeed;
+
 
             if(driverController.getYButton()){
              // xSpeed = -txOutput();

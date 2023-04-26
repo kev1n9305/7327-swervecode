@@ -55,7 +55,9 @@ public void robotInit(){
     pixy.setCameraBrightness(50);
 
     leds = new LEDs(0);
-    leds.setBurgundy();   
+    leds.setBurgundy();
+    
+    currentPipeline.setPipeline(0);
 }
 
   @Override

@@ -111,12 +111,10 @@ public class Constants {
   }
 
   public static final class PixyContants{
-
-    
-public static final double speedRange = 0.2;
-public static final int center = 158;
-public static final int numObjects = 0;
-public static final double maxSpeedPixy = .35;
-
+    public static final double speedRange = 0.2;
+    public static final int center = 158;
+    public static final int numObjects = 0;
+    public static final double maxSpeedPixy = .35;
   }
+  
 }

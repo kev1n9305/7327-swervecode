@@ -19,8 +19,6 @@ public class LEDs {
       setBurgundy(); 
     }
 
-
-
     public void setBurgundy() { // default
       redOutput.setRaw(119);   // R: 119, G: 0, B: 28
       greenOutput.setRaw(0);

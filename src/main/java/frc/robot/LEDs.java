@@ -1,5 +1,6 @@
 package frc.robot;
 
+// import edu.wpi.first.net.PortForwarder;
 import edu.wpi.first.wpilibj.PWM;
 
 
@@ -9,12 +10,16 @@ public class LEDs {
     private PWM blueOutput;
 
     public LEDs(int usbPort) {
+     // PortForwarder.add(usbPort, null, usbPort);
+
       redOutput = new PWM(usbPort); // red pin
       greenOutput = new PWM(usbPort); // green pin
       blueOutput = new PWM(usbPort); // blue pin
 
       setBurgundy(); 
     }
+
+
 
     public void setBurgundy() { // default
       redOutput.setRaw(119);   // R: 119, G: 0, B: 28

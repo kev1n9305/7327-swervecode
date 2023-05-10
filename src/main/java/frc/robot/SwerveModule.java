@@ -150,7 +150,7 @@ public double getDrivePosition() {
 
  SwerveModuleState state =
     //SwerveModuleState.optimize(desiredState, new Rotation2d(Math.toDegrees(currentAngle())));
-       Drivetrain.newOptimize(desiredState, new Rotation2d(currentAngle()));
+    Drivetrain.newOptimize(desiredState, new Rotation2d(currentAngle()));
 
     // Calculate the drive output from the drive PID controller.
     final double driveOutput =
@@ -163,7 +163,7 @@ public double getDrivePosition() {
     // Calculate the turning motor output from the turning PID controller.
     driveMotor.set(driveOutput);
     turnMotor.set(ControlMode.PercentOutput,turnOutput);
-   SmartDashboard.putString("swerve"+ absoluteEncoder.getChannel()+ "og Angle", state.toString());
+    SmartDashboard.putString("swerve"+ absoluteEncoder.getChannel()+ "og Angle", state.toString());
    // SmartDashboard.putString("swerve"+ absoluteEncoder.getChannel()+ "og Angle", desiredState.toString());
     SmartDashboard.putNumber("swerve"+ absoluteEncoder.getChannel() + "currentAngle", currentAngle());
     

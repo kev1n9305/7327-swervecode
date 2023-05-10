@@ -76,19 +76,23 @@ public void robotInit(){
     driveWithJoystick(true);
     GyroReset();
 
+    setLLPipeline();
+
     mPixy.SendableData(pixy);
     mPixy.ledState(mPixy.toggleMode(mode, driverController.getAButton()), pixy);
     // mPixy.ledState(mPixy.toggleMode(mode, m_controller.getCrossButton()), pixy);
 
-    if (driverController.getLeftBumper()){
-      leds.setPurple();
-      currentPipeline.setPipeline(0);
-    } else if (driverController.getRightBumper()){
-      leds.setYellow();
-      currentPipeline.setPipeline(1);
-    }
-
   }
+
+private void setLLPipeline() {
+  if (driverController.getLeftBumper()){
+    leds.setPurple();
+    currentPipeline.setPipeline(0);
+  } else if (driverController.getRightBumper()){
+    leds.setYellow();
+    currentPipeline.setPipeline(1);
+  }
+}
 
   private void GyroReset(){
     m_swerve.resetHeading(driverController.getBButton());

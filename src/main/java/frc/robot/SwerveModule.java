@@ -4,33 +4,32 @@
 
 package frc.robot;
 
-import com.ctre.phoenix.Util;
+// import com.ctre.phoenix.Util;
 import com.ctre.phoenix.motorcontrol.ControlMode;
-import com.ctre.phoenix.motorcontrol.RemoteSensorSource;
+// import com.ctre.phoenix.motorcontrol.RemoteSensorSource;
 import com.ctre.phoenix.motorcontrol.can.VictorSPX;
-import com.ctre.phoenix.motorcontrol.can.VictorSPXConfiguration;
-import com.ctre.phoenix.sensors.CANCoder;
+// import com.ctre.phoenix.motorcontrol.can.VictorSPXConfiguration;
+// import com.ctre.phoenix.sensors.CANCoder;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
-import edu.wpi.first.math.MathUtil;
+// import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
-import edu.wpi.first.math.controller.ProfiledPIDController;
-import edu.wpi.first.math.controller.SimpleMotorFeedforward;
+// import edu.wpi.first.math.controller.ProfiledPIDController;
+// import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
-import edu.wpi.first.math.trajectory.TrapezoidProfile;
+// import edu.wpi.first.math.trajectory.TrapezoidProfile;
 
-
-import edu.wpi.first.math.util.Units;
-import edu.wpi.first.wpilibj.AnalogEncoder;
+// import edu.wpi.first.math.util.Units;
+// import edu.wpi.first.wpilibj.AnalogEncoder;
 import edu.wpi.first.wpilibj.AnalogInput;
-import edu.wpi.first.wpilibj.Encoder;
+// import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.RobotController;
-import edu.wpi.first.wpilibj.motorcontrol.MotorController;
-import edu.wpi.first.wpilibj.motorcontrol.PWMSparkMax;
+// import edu.wpi.first.wpilibj.motorcontrol.MotorController;
+// import edu.wpi.first.wpilibj.motorcontrol.PWMSparkMax;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants.ModuleConstants;
 
@@ -40,22 +39,22 @@ public class SwerveModule {
   private static final double kModuleMaxAngularAcceleration =
       2 * Math.PI; // radians per second squared
 
-      private final CANSparkMax driveMotor;
-      private final VictorSPX turnMotor;
+  private final CANSparkMax driveMotor;
+  private final VictorSPX turnMotor;
       
      // private final AnalogInput absoluteEncoder;
 
-     private final AnalogInput absoluteEncoder;
+  private final AnalogInput absoluteEncoder;
 
      // private final AnalogEncoder absAnalogEncoder;
 
-      private final RelativeEncoder driveEncoder;
+  private final RelativeEncoder driveEncoder;
 
-      private final double absoluteEncoderOffsetRad;
+  private final double absoluteEncoderOffsetRad;
 
-      private final boolean absoluteEncoderReversed;
+  private final boolean absoluteEncoderReversed;
 
-      private final PIDController m_turningPIDController  = new PIDController(1.5,0, 0);
+  private final PIDController m_turningPIDController  = new PIDController(1.5,0, 0);
 
      // private final Drivetrain m_swerves = new Drivetrain();
 

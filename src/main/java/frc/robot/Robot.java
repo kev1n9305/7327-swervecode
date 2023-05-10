@@ -84,15 +84,15 @@ public void robotInit(){
 
   }
 
-private void setLLPipeline() {
-  if (driverController.getLeftBumper()){
-    leds.setPurple();
-    currentPipeline.setPipeline(0);
-  } else if (driverController.getRightBumper()){
-    leds.setYellow();
-    currentPipeline.setPipeline(1);
+  private void setLLPipeline() {
+    if (driverController.getLeftBumper()){
+      leds.setPurple();
+      currentPipeline.setPipeline(0);
+    } else if (driverController.getRightBumper()){
+      leds.setYellow();
+      currentPipeline.setPipeline(1);
+    }
   }
-}
 
   private void GyroReset(){
     m_swerve.resetHeading(driverController.getBButton());

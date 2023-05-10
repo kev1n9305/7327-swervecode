@@ -64,6 +64,33 @@ public class Pixy {
         }
     }
 
+    // _______________________________________________
+    
+    public int G2Error(Pixy2 pixy) {
+        pixy.getCCC().getBlocks(false, Pixy2CCC.CCC_SIG1, 25);
+        List<Pixy2CCC.Block> blocksList = pixy.getCCC().getBlockCache();
+
+        if (!blocksList.isEmpty()) {
+            int numObjectsX = blocksList.get(0).getX();
+            return PixyContants.center - numObjectsX;
+        } else {
+            return 0;
+        }
+    }
+
+    public int getNumObjectsG2(Pixy2 pixy) {
+        pixy.getCCC().getBlocks(false, Pixy2CCC.CCC_SIG1, 25);
+        List<Pixy2CCC.Block> blocksList = pixy.getCCC().getBlockCache();
+
+        if (!blocksList.isEmpty()){
+            return blocksList.size();
+        } else {
+            return 0;
+        }
+    }
+ 
+// ______________________________________________________-
+
     public double xSpeedOutput(int error){
 
         PIDController pixyPidController = new PIDController(.05, 0.0, 0);

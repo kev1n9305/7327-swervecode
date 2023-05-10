@@ -60,11 +60,6 @@ public class Constants {
         public static final boolean kFrontRightDriveEncoderReversed = true;
         public static final boolean kBackRightDriveEncoderReversed = true;
     
-    
-    
-    
-    
-    
         public static final boolean kGyroReversed = false;
       }
 
